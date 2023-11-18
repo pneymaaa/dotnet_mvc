@@ -1,0 +1,99 @@
+@* Define Model *@
+@model List<udt_Personal>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        
+        <table class="table table-bordered personal-list">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Hobby</th>
+                <th scope="col">Age</th>
+
+                <th scope="col" style="display:none;">IdGender</th>
+                <th scope="col" style="display:none;">IdHobby</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+        @if(Model.Count > 0) 
+        {
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td scope="row">@item.Name</td>
+                    <td>@item.GenderName</td>
+                    <td>@item.NameHobby</td>
+                    <td>@item.Age</td>
+                    <td style="display:none;">@item.IdGender</td>
+                    <td style="display:none;">@item.IdHobby</td>
+                </tr>
+            }
+        }
+        </tbody>
+        </table>
+
+        <button id="btnGenerate" type="button" class="btn btn-secondary">Generate</button>
+        <button id="btnSubmit" type="button" class="btn btn-primary">Submit</button>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function insertData(listItems) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("InsertData", "Home")",
+                data: JSON.stringify(listItems),
+                contentType: "application/json;",
+                dataType: "json",
+                success: function (msg) {
+                    if(msg === "") {
+                        alert("Success");
+                    } else {
+                        alert(msg);
+                    }
+                },
+                error: function(er) {
+                    alert(er);
+                }
+            });
+        };
+
+        function getData() {
+            var url = '@Url.Action("Data", "Home")';
+            window.location.href = url;
+        };
+
+        $("#btnGenerate").on("click", function() {
+            getData();
+        });
+
+        $("#btnSubmit").on("click", function () {
+            let listItems = [];
+            $("table.personal-list tbody tr").each(function () {
+                let row = $(this);
+                let obj = {};
+                obj.Name = row.find("td").eq(0).html();
+                obj.GenderName = row.find("td").eq(1).html();
+                obj.NameHobby = row.find("td").eq(2).html();
+                obj.Age = row.find("td").eq(3).html();
+
+                obj.IdGender = row.find("td").eq(4).html();
+                obj.IdHobby = row.find("td").eq(5).html();
+
+                listItems.push(obj);
+            });
+            if(listItems.length > 0) {
+                insertData(listItems);
+            } else {
+                alert("Please generate data");
+            }
+        });
+    </script>
+}

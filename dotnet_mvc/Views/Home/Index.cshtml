@@ -1,38 +1,40 @@
-﻿@{
+﻿@* Define Model *@
+@model List<udt_Personal>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="row">
     <div class="col-md-8 offset-md-2">
-        <table class="table table-bordered">
+        
+        <table class="table table-bordered personal-list">
         <thead>
             <tr>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Hobby</th>
+                <th scope="col">Age</th>
+
+                <th scope="col" style="display:none;">IdGender</th>
+                <th scope="col" style="display:none;">IdHobby</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-            </tr>
         </tbody>
         </table>
+
+        <button id="btnGenerate" type="button" class="btn btn-secondary">Generate</button>
     </div>
 </div>
 
 @section Scripts{
     <script>
-        $(document).ready(function() {
+        function getData() {
+            var url = '@Url.Action("Data", "Home")';
+            window.location.href = url;
+        }
+        $("#btnGenerate").on("click", function() {
+            getData();
         });
-        
-
     </script>
 }

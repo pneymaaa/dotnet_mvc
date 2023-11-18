@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using dotnet_mvc.Models;
 using dotnet_mvc.Data.Services;
 
@@ -19,9 +18,18 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult GetSeed()
+    [HttpGet]
+    public IActionResult Data()
     {
-        var data = _service.GenerateSeed();
+        var data = _service.GetDataTable();
         return View(data);
+    }
+
+    [HttpPost]
+    public IActionResult InsertData([FromBody] List<udt_Personal> udt_Personals)
+    {
+        string errorMessage;
+        _service.InsertDataTable(udt_Personals, out errorMessage);
+        return Json(errorMessage);
     }
 }

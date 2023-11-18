@@ -1,10 +1,13 @@
 using dotnet_mvc.Data;
+using dotnet_mvc.Data.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IHomeServices, HomeService>();
+
 builder.Services.AddDbContext<AppDbContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString")));
 
@@ -30,4 +33,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+AppDbInitializer.Seed(app);
 app.Run();
